@@ -39,7 +39,7 @@ class CalendarDatePicker extends BasePicker {
   final ValueChanged<DateTimeRange>? onDateRangeChange;
 
   //多日期变化回调函数
-  final ValueChanged<DateTimeRange>? onMultipleChange;
+  final ValueChanged<List<DateTime>>? onMultipleChange;
 
   final VoidCallback? onYearPick;
 
