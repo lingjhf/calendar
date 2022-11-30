@@ -3,3 +3,13 @@ enum CalendarMode {
   month,
   year,
 }
+
+enum CalendarWeekDay {
+  monday,
+  tuesday,
+  wednesday,
+  thursday,
+  friday,
+  saturday,
+  sunday,
+}
