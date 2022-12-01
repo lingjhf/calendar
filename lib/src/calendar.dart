@@ -63,11 +63,13 @@ class Calendar extends StatefulWidget {
 
 class _CalendarState extends State<Calendar> {
   late DateTime initDate;
+  late DateTime currentDate;
   CalendarMode mode = CalendarMode.day;
 
   @override
   void initState() {
     initDate = widget.currentDate;
+    currentDate = widget.currentDate;
     mode = widget.mode;
     super.initState();
   }
@@ -84,12 +86,19 @@ class _CalendarState extends State<Calendar> {
     });
   }
 
+  void onMonthChange(DateTime date) {
+    setState(() {
+      initDate = date;
+      mode = CalendarMode.day;
+    });
+  }
+
   Widget buildPicker(CalendarStyle style) {
     switch (mode) {
       case CalendarMode.day:
         return CalendarDatePicker(
           initDate: initDate,
-          currentDate: widget.currentDate,
+          currentDate: currentDate,
           style: style,
           onYearPick: onYearPick,
           onMonthPick: onMonthPick,
@@ -100,13 +109,15 @@ class _CalendarState extends State<Calendar> {
       case CalendarMode.month:
         return CalendarMonthPicker(
           initDate: initDate,
-          currentDate: widget.currentDate,
+          currentDate: currentDate,
           style: style,
+          onChange: onMonthChange,
+          onYearPick: onYearPick,
         );
       case CalendarMode.year:
         return CalendarYearPicker(
           initDate: initDate,
-          currentDate: widget.currentDate,
+          currentDate: currentDate,
           style: style,
         );
     }
