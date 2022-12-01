@@ -101,11 +101,13 @@ class _CalendarState extends State<Calendar> {
         return CalendarMonthPicker(
           initDate: initDate,
           currentDate: widget.currentDate,
+          style: style,
         );
       case CalendarMode.year:
         return CalendarYearPicker(
           initDate: initDate,
           currentDate: widget.currentDate,
+          style: style,
         );
     }
   }
