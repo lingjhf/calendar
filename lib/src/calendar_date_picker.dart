@@ -2,19 +2,18 @@ import 'package:flutter/material.dart' hide CalendarDatePicker;
 
 import 'base.dart';
 import 'extensions.dart';
-import 'theme.dart';
 
 class CalendarDatePicker extends BasePicker {
   CalendarDatePicker({
     super.key,
     super.initDate,
     super.currentDate,
+    super.style,
     super.onChange,
     this.range = false,
     this.dateRange,
     this.multiple = false,
     this.dates = const [],
-    this.style,
     this.onDateRangeChange,
     this.onMultipleChange,
     this.onMonthPick,
@@ -32,8 +31,6 @@ class CalendarDatePicker extends BasePicker {
 
   //multiple为true才能使用
   final List<DateTime> dates;
-
-  final CalendarStyle? style;
 
   //日期范围变化回调函数
   final ValueChanged<DateTimeRange>? onDateRangeChange;
@@ -116,7 +113,7 @@ class _CalendarDatePickerState extends State<CalendarDatePicker> {
   //下一年
   void onNextYear() {
     setState(() {
-      initDate = DateTime(initDate.year + 1, initDate.month, initDate.day);
+      initDate = initDate.addYear();
       setDates();
     });
   }
@@ -124,7 +121,7 @@ class _CalendarDatePickerState extends State<CalendarDatePicker> {
   //上一年
   void onPrevYear() {
     setState(() {
-      initDate = DateTime(initDate.year - 1, initDate.month, initDate.day);
+      initDate = initDate.subtractYear();
       setDates();
     });
   }
@@ -132,13 +129,7 @@ class _CalendarDatePickerState extends State<CalendarDatePicker> {
   //下一个月
   void onNextMonth() {
     setState(() {
-      var year = initDate.year;
-      var month = initDate.month + 1;
-      if (month > 12) {
-        year += 1;
-        month = 1;
-      }
-      initDate = DateTime(year, month, initDate.day);
+      initDate = initDate.addMonth();
       setDates();
     });
   }
@@ -146,13 +137,7 @@ class _CalendarDatePickerState extends State<CalendarDatePicker> {
   //上一个月
   void onPrevMonth() {
     setState(() {
-      var year = initDate.year;
-      var month = initDate.month - 1;
-      if (month < 1) {
-        year -= 1;
-        month = 12;
-      }
-      initDate = DateTime(year, month, initDate.day);
+      initDate = initDate.subtractMonth();
       setDates();
     });
   }
