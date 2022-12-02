@@ -243,6 +243,12 @@ class _CalendarDatePickerState extends State<CalendarDatePicker> {
           TextButton(
             style: ButtonStyle(
               textStyle: MaterialStateProperty.resolveWith((states) {
+                if (date == DateUtils.dateOnly(currentDate)) {
+                  return const TextStyle(
+                    fontWeight: FontWeight.w600,
+                    fontSize: 16,
+                  );
+                }
                 return const TextStyle(fontWeight: FontWeight.w600);
               }),
               shape: const MaterialStatePropertyAll(CircleBorder()),
