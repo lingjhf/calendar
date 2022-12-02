@@ -86,7 +86,20 @@ class _CalendarState extends State<Calendar> {
     });
   }
 
+  void onDateChange(DateTime date) {
+    currentDate = date;
+    initDate = date;
+    widget.onDateChange?.call(date);
+  }
+
   void onMonthChange(DateTime date) {
+    setState(() {
+      initDate = date;
+      mode = CalendarMode.day;
+    });
+  }
+
+  void onYearChange(DateTime date) {
     setState(() {
       initDate = date;
       mode = CalendarMode.day;
@@ -102,7 +115,7 @@ class _CalendarState extends State<Calendar> {
           style: style,
           onYearPick: onYearPick,
           onMonthPick: onMonthPick,
-          onChange: widget.onDateChange,
+          onChange: onDateChange,
           onDateRangeChange: widget.onDateRangeChange,
           onMultipleChange: widget.onMultipleChange,
         );
@@ -119,6 +132,7 @@ class _CalendarState extends State<Calendar> {
           initDate: initDate,
           currentDate: currentDate,
           style: style,
+          onChange: onYearChange,
         );
     }
   }
