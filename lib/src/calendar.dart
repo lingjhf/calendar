@@ -113,6 +113,8 @@ class _CalendarState extends State<Calendar> {
           initDate: initDate,
           currentDate: currentDate,
           style: style,
+          onYearChange: (date) => initDate = date,
+          onMonthChange: (date) => initDate = date,
           onYearPick: onYearPick,
           onMonthPick: onMonthPick,
           onChange: onDateChange,

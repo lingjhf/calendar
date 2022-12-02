@@ -16,6 +16,8 @@ class CalendarDatePicker extends BasePicker {
     this.dates = const [],
     this.onDateRangeChange,
     this.onMultipleChange,
+    this.onYearChange,
+    this.onMonthChange,
     this.onMonthPick,
     this.onYearPick,
   });
@@ -37,6 +39,10 @@ class CalendarDatePicker extends BasePicker {
 
   //多日期变化回调函数
   final ValueChanged<List<DateTime>>? onMultipleChange;
+
+  final ValueChanged<DateTime>? onYearChange;
+
+  final ValueChanged<DateTime>? onMonthChange;
 
   final VoidCallback? onYearPick;
 
@@ -115,6 +121,7 @@ class _CalendarDatePickerState extends State<CalendarDatePicker> {
     setState(() {
       initDate = initDate.addYear();
       setDates();
+      widget.onYearChange?.call(initDate);
     });
   }
 
@@ -123,6 +130,7 @@ class _CalendarDatePickerState extends State<CalendarDatePicker> {
     setState(() {
       initDate = initDate.subtractYear();
       setDates();
+      widget.onYearChange?.call(initDate);
     });
   }
 
@@ -131,6 +139,7 @@ class _CalendarDatePickerState extends State<CalendarDatePicker> {
     setState(() {
       initDate = initDate.addMonth();
       setDates();
+      widget.onMonthChange?.call(initDate);
     });
   }
 
@@ -139,6 +148,7 @@ class _CalendarDatePickerState extends State<CalendarDatePicker> {
     setState(() {
       initDate = initDate.subtractMonth();
       setDates();
+      widget.onMonthChange?.call(initDate);
     });
   }
 
