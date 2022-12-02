@@ -17,7 +17,7 @@ class CalendarStyle extends ThemeExtension<CalendarStyle> {
             secondaryColor ?? const Color(0xff3C3C43).withOpacity(0.3),
         accentColor = accentColor ?? const Color(0xff0084FF),
         accentBackgroundColor =
-            accentBackgroundColor ?? const Color(0xff0084FF).withOpacity(0.12);
+            accentBackgroundColor ?? const Color(0xff0084FF).withOpacity(0.3);
 
   //背景颜色
   final Color backgroundColor;
@@ -38,10 +38,9 @@ class CalendarStyle extends ThemeExtension<CalendarStyle> {
 
   //暗黑风格
   factory CalendarStyle.dark() => CalendarStyle(
-        backgroundColor: const Color(0xff000000),
-        primaryColor: const Color(0xffffffff),
-        secondaryColor:const Color(0xffEBEBF5).withOpacity(0.3)
-      );
+      backgroundColor: const Color(0xff000000),
+      primaryColor: const Color(0xffffffff),
+      secondaryColor: const Color(0xffEBEBF5).withOpacity(0.3));
 
   @override
   CalendarStyle copyWith({
