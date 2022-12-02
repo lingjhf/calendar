@@ -11,6 +11,11 @@ class Calendar extends StatefulWidget {
     super.key,
     DateTime? initDate,
     DateTime? currentDate,
+    this.multiple = false,
+    this.range = false,
+    this.dateRange,
+    this.dates = const [],
+    this.dateRanges = const [],
     this.allowDates = const [],
     this.minDate,
     this.maxDate,
@@ -30,19 +35,36 @@ class Calendar extends StatefulWidget {
 
   final DateTime currentDate;
 
+  //是否可以选择日期范围
+  final bool range;
+
+  //是否可以多选日期
+  final bool multiple;
+
+  //range为true才能使用
+  final DateTimeRange? dateRange;
+
+  //multiple为true才能使用
+  final List<DateTime> dates;
+
+  final List<DateTimeRange> dateRanges;
+
+  //todo
   final List<DateTime> allowDates;
 
+  //todo
   final DateTime? minDate;
 
+  //todo
   final DateTime? maxDate;
 
-  //一个星期的开始
+  //todo一个星期的开始
   final CalendarWeekDay firstDayOfWeek;
 
-  //是否禁用
+  //todo是否禁用
   final bool disable;
 
-  //是否只读
+  //todo是否只读
   final bool readonly;
 
   final CalendarMode mode;
@@ -112,6 +134,15 @@ class _CalendarState extends State<Calendar> {
         return CalendarDatePicker(
           initDate: initDate,
           currentDate: currentDate,
+          range: widget.range,
+          multiple: widget.multiple,
+          dateRange: widget.dateRange,
+          dates: widget.dates,
+          dateRanges: widget.dateRanges,
+          allowDates: widget.allowDates,
+          minDate: widget.minDate,
+          maxDate: widget.maxDate,
+          firstDayOfWeek: widget.firstDayOfWeek,
           style: style,
           onYearChange: (date) => initDate = date,
           onMonthChange: (date) => initDate = date,

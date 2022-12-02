@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart' hide CalendarDatePicker;
 
+import '../calendar.dart';
 import 'base.dart';
 import 'extensions.dart';
 
@@ -11,11 +12,17 @@ class CalendarDatePicker extends BasePicker {
     super.style,
     super.onChange,
     this.range = false,
-    this.dateRange,
     this.multiple = false,
+    this.dateRange,
     this.dates = const [],
+    this.dateRanges = const [],
+    this.allowDates = const [],
+    this.minDate,
+    this.maxDate,
+    this.firstDayOfWeek = CalendarWeekDay.sunday,
     this.onDateRangeChange,
     this.onMultipleChange,
+    this.onMultipleRangeChange,
     this.onYearChange,
     this.onMonthChange,
     this.onMonthPick,
@@ -34,11 +41,27 @@ class CalendarDatePicker extends BasePicker {
   //multiple为true才能使用
   final List<DateTime> dates;
 
+  final List<DateTimeRange> dateRanges;
+
+  //todo
+  final List<DateTime> allowDates;
+
+  //todo
+  final DateTime? minDate;
+
+  //todo
+  final DateTime? maxDate;
+
+  //todo一个星期的开始
+  final CalendarWeekDay firstDayOfWeek;
+
   //日期范围变化回调函数
   final ValueChanged<DateTimeRange>? onDateRangeChange;
 
   //多日期变化回调函数
   final ValueChanged<List<DateTime>>? onMultipleChange;
+
+  final ValueChanged<List<DateTimeRange>>? onMultipleRangeChange;
 
   final ValueChanged<DateTime>? onYearChange;
 
@@ -53,15 +76,7 @@ class CalendarDatePicker extends BasePicker {
 }
 
 class _CalendarDatePickerState extends State<CalendarDatePicker> {
-  final weekDays = const <String>[
-    'Sun',
-    'Mon',
-    'Tue',
-    'Wed',
-    'Thu',
-    'Fri',
-    'Sat'
-  ];
+  List<String> weekDays = [];
 
   List<DateTime> dates = [];
   late DateTime initDate;
@@ -77,6 +92,7 @@ class _CalendarDatePickerState extends State<CalendarDatePicker> {
 
   @override
   void initState() {
+    setWeekDays(widget.firstDayOfWeek);
     toolbarButtonSytle = toolbarButtonSytle.copyWith(
       foregroundColor: MaterialStatePropertyAll(widget.style?.primaryColor),
       overlayColor:
@@ -93,15 +109,26 @@ class _CalendarDatePickerState extends State<CalendarDatePicker> {
     super.initState();
   }
 
+  void setWeekDays(CalendarWeekDay weekDay) {
+    var values = CalendarWeekDay.values.toList();
+    final index = values.indexOf(weekDay);
+    weekDays = [
+      ...values.sublist(index).map((e) =>
+          '${e.name.substring(0, 1).toUpperCase()}${e.name.substring(1, 3)}'),
+      ...values.sublist(0, index).map((e) =>
+          '${e.name.substring(0, 1).toUpperCase()}${e.name.substring(1, 3)}')
+    ];
+  }
+
   void setDates() {
     final dates = <DateTime>[];
     final day1 = DateTime(initDate.year, initDate.month, 1);
-    if (day1.weekday != DateTime.sunday) {
+    if (day1.weekday != widget.firstDayOfWeek.value) {
       var tempDate = day1;
       while (true) {
         tempDate = tempDate.subtract(const Duration(days: 1));
         dates.insert(0, tempDate);
-        if (tempDate.weekday == DateTime.sunday) break;
+        if (tempDate.weekday == widget.firstDayOfWeek.value) break;
       }
     }
     var rowCount = 0;
@@ -109,7 +136,7 @@ class _CalendarDatePickerState extends State<CalendarDatePicker> {
     while (rowCount < 6) {
       dates.add(tempDate);
       tempDate = tempDate.add(const Duration(days: 1));
-      if (tempDate.weekday == DateTime.sunday) {
+      if (tempDate.weekday == widget.firstDayOfWeek.value) {
         rowCount++;
       }
     }
