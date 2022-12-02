@@ -28,12 +28,12 @@ extension DateExtension on DateTime {
     }
   }
 
-  DateTime addYear() {
-    return DateTime(year + 1, month, day);
+  DateTime addYear([int value = 1]) {
+    return DateTime(year + value, month, day);
   }
 
-  DateTime subtractYear() {
-    return DateTime(year - 1, month, day);
+  DateTime subtractYear([int value = 1]) {
+    return DateTime(year - value, month, day);
   }
 
   DateTime addMonth() {
