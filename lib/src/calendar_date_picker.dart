@@ -81,10 +81,12 @@ class _CalendarDatePickerState extends State<CalendarDatePicker> {
   List<DateTime> dates = [];
   late DateTime initDate;
   late DateTime currentDate;
-  ButtonStyle toolbarButtonSytle = const ButtonStyle(
+
+  ButtonStyle titleButtonSytle = const ButtonStyle(
     padding: MaterialStatePropertyAll(EdgeInsets.all(0)),
   );
-  ButtonStyle toolbarActionButtonStyle = const ButtonStyle(
+
+  ButtonStyle actionButtonStyle = const ButtonStyle(
     shape: MaterialStatePropertyAll(CircleBorder()),
     padding: MaterialStatePropertyAll(EdgeInsets.all(0)),
     minimumSize: MaterialStatePropertyAll(Size(0, 0)),
@@ -92,21 +94,22 @@ class _CalendarDatePickerState extends State<CalendarDatePicker> {
 
   @override
   void initState() {
+    setButtonStyle();
     setWeekDays(widget.firstDayOfWeek);
-    toolbarButtonSytle = toolbarButtonSytle.copyWith(
-      foregroundColor: MaterialStatePropertyAll(widget.style?.primaryColor),
-      overlayColor:
-          MaterialStatePropertyAll(widget.style?.accentBackgroundColor),
-    );
-    toolbarActionButtonStyle = toolbarActionButtonStyle.copyWith(
-      foregroundColor: MaterialStatePropertyAll(widget.style?.primaryColor),
-      overlayColor:
-          MaterialStatePropertyAll(widget.style?.accentBackgroundColor),
-    );
     initDate = widget.initDate;
     currentDate = widget.currentDate;
     setDates();
     super.initState();
+  }
+
+  void setButtonStyle() {
+    final style = ButtonStyle(
+      foregroundColor: MaterialStatePropertyAll(widget.style?.primaryColor),
+      overlayColor:
+          MaterialStatePropertyAll(widget.style?.accentBackgroundColor),
+    );
+    titleButtonSytle = titleButtonSytle.merge(style);
+    actionButtonStyle = actionButtonStyle.merge(style);
   }
 
   void setWeekDays(CalendarWeekDay weekDay) {
@@ -194,7 +197,7 @@ class _CalendarDatePickerState extends State<CalendarDatePicker> {
     return Row(
       children: [
         TextButton(
-          style: toolbarActionButtonStyle,
+          style: actionButtonStyle,
           onPressed: onPrevMonth,
           child: const Icon(Icons.keyboard_arrow_left),
         ),
@@ -202,20 +205,20 @@ class _CalendarDatePickerState extends State<CalendarDatePicker> {
         SizedBox(
           width: 80,
           child: TextButton(
-            style: toolbarButtonSytle,
+            style: titleButtonSytle,
             onPressed: () => widget.onMonthPick?.call(),
             child: Text(initDate.monthString()),
           ),
         ),
         const SizedBox(width: 4),
         TextButton(
-          style: toolbarActionButtonStyle,
+          style: actionButtonStyle,
           onPressed: onNextMonth,
           child: const Icon(Icons.keyboard_arrow_right),
         ),
         const Spacer(),
         TextButton(
-          style: toolbarActionButtonStyle,
+          style: actionButtonStyle,
           onPressed: onPrevYear,
           child: const Icon(Icons.keyboard_arrow_left),
         ),
@@ -223,14 +226,14 @@ class _CalendarDatePickerState extends State<CalendarDatePicker> {
         SizedBox(
           width: 48,
           child: TextButton(
-            style: toolbarButtonSytle,
+            style: titleButtonSytle,
             onPressed: () => widget.onYearPick?.call(),
             child: Text('${initDate.year}'),
           ),
         ),
         const SizedBox(width: 4),
         TextButton(
-          style: toolbarActionButtonStyle,
+          style: actionButtonStyle,
           onPressed: onNextYear,
           child: const Icon(Icons.keyboard_arrow_right),
         ),
@@ -263,45 +266,51 @@ class _CalendarDatePickerState extends State<CalendarDatePicker> {
     return GridView(
       gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
         crossAxisCount: 7,
-        mainAxisExtent: 32,
+        mainAxisExtent: 36,
       ),
       children: [
         for (var date in dates)
-          TextButton(
-            style: ButtonStyle(
-              textStyle: MaterialStateProperty.resolveWith((states) {
-                if (date == DateUtils.dateOnly(currentDate)) {
-                  return const TextStyle(
-                    fontWeight: FontWeight.w600,
-                    fontSize: 16,
-                  );
-                }
-                return const TextStyle(fontWeight: FontWeight.w600);
-              }),
-              shape: const MaterialStatePropertyAll(CircleBorder()),
-              foregroundColor: MaterialStateProperty.resolveWith((states) {
-                if (date == DateUtils.dateOnly(currentDate) ||
-                    date == DateUtils.dateOnly(DateTime.now())) {
-                  return widget.style?.accentColor;
-                }
-                if (date.month == initDate.month) {
-                  return widget.style?.primaryColor;
-                }
-                return widget.style?.secondaryColor;
-              }),
-              backgroundColor: MaterialStateProperty.resolveWith((states) {
-                if (date == DateUtils.dateOnly(currentDate)) {
-                  return widget.style?.accentBackgroundColor;
-                }
-                return null;
-              }),
-              overlayColor: MaterialStateProperty.resolveWith((states) {
-                return widget.style?.accentBackgroundColor;
-              }),
+          Center(
+            child: SizedBox(
+              width: 36,
+              height: 32,
+              child: TextButton(
+                style: ButtonStyle(
+                  textStyle: MaterialStateProperty.resolveWith((states) {
+                    if (date == DateUtils.dateOnly(currentDate)) {
+                      return const TextStyle(
+                        fontWeight: FontWeight.w600,
+                        fontSize: 16,
+                      );
+                    }
+                    return const TextStyle(fontWeight: FontWeight.w600);
+                  }),
+                  shape: const MaterialStatePropertyAll(CircleBorder()),
+                  foregroundColor: MaterialStateProperty.resolveWith((states) {
+                    if (date == DateUtils.dateOnly(currentDate) ||
+                        date == DateUtils.dateOnly(DateTime.now())) {
+                      return widget.style?.accentColor;
+                    }
+                    if (date.month == initDate.month) {
+                      return widget.style?.primaryColor;
+                    }
+                    return widget.style?.secondaryColor;
+                  }),
+                  backgroundColor: MaterialStateProperty.resolveWith((states) {
+                    if (date == DateUtils.dateOnly(currentDate)) {
+                      return widget.style?.accentBackgroundColor;
+                    }
+                    return null;
+                  }),
+                  overlayColor: MaterialStateProperty.resolveWith((states) {
+                    return widget.style?.accentBackgroundColor;
+                  }),
+                ),
+                onPressed: () => onSelectDate(date),
+                child: Text('${date.day}'),
+              ),
             ),
-            onPressed: () => onSelectDate(date),
-            child: Text('${date.day}'),
-          )
+          ),
       ],
     );
   }
@@ -310,7 +319,7 @@ class _CalendarDatePickerState extends State<CalendarDatePicker> {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        buildToolbar(),
+        SizedBox(height: 32, child: buildToolbar()),
         buildWeekDays(),
         Expanded(child: buildDates())
       ],

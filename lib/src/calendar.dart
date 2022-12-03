@@ -186,7 +186,7 @@ class _CalendarState extends State<Calendar> {
         ),
         child: SizedBox(
           width: 7 * 36,
-          height: 8 * 32,
+          height: 64 + 6 * 36,
           child: buildPicker(style),
         ),
       ),
