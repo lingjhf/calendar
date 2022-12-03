@@ -23,3 +23,48 @@ abstract class BasePicker extends StatefulWidget {
 
   final ValueChanged<DateTime>? onChange;
 }
+
+abstract class BaseCalendarDatePicker extends StatefulWidget {
+  const BaseCalendarDatePicker({
+    super.key,
+    required this.initDate,
+    required this.dates ,
+    this.style,
+    this.onInitDateChange,
+  });
+
+  final DateTime initDate;
+
+  final List<DateTime> dates;
+
+  final CalendarStyle? style;
+
+  final ValueChanged<DateTime>? onInitDateChange;
+}
+
+abstract class BaseCalendarDatePickerState<T extends BaseCalendarDatePicker>
+    extends State<T> {
+  List<DateTime> dates = [];
+  late DateTime initDate;
+
+  late ButtonStyle cellStyle;
+
+  @override
+  void initState() {
+    initDate = widget.initDate;
+    dates = widget.dates;
+    cellStyle = ButtonStyle(
+      overlayColor: MaterialStateProperty.resolveWith((states) {
+        return widget.style?.accentBackgroundColor;
+      }),
+    );
+    super.initState();
+  }
+
+  @override
+  void didUpdateWidget(covariant T oldWidget) {
+    initDate = widget.initDate;
+    dates = widget.dates;
+    super.didUpdateWidget(oldWidget);
+  }
+}
