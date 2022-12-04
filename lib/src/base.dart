@@ -60,6 +60,7 @@ abstract class BaseCalendarDatePickerState<T extends BaseCalendarDatePicker>
     initDate = widget.initDate;
     dates = widget.dates;
     cellStyle = ButtonStyle(
+      shape: const MaterialStatePropertyAll(CircleBorder()),
       overlayColor: MaterialStateProperty.resolveWith((states) {
         if (widget.readonly) {
           return Colors.transparent;
@@ -75,5 +76,12 @@ abstract class BaseCalendarDatePickerState<T extends BaseCalendarDatePicker>
     initDate = widget.initDate;
     dates = widget.dates;
     super.didUpdateWidget(oldWidget);
+  }
+
+  Color? getDateOverlayColor(Set<MaterialState> states, DateTime date) {
+    if (widget.allowDates.isNotEmpty && !widget.allowDates.contains(date)) {
+      return Colors.transparent;
+    }
+    return cellStyle.overlayColor?.resolve(states);
   }
 }
