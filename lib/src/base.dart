@@ -30,6 +30,7 @@ abstract class BaseCalendarDatePicker extends StatefulWidget {
     this.readonly = false,
     required this.initDate,
     required this.dates,
+    this.allowDates = const [],
     this.style,
     this.onInitDateChange,
   });
@@ -39,6 +40,8 @@ abstract class BaseCalendarDatePicker extends StatefulWidget {
   final DateTime initDate;
 
   final List<DateTime> dates;
+
+  final List<DateTime> allowDates;
 
   final CalendarStyle? style;
 
