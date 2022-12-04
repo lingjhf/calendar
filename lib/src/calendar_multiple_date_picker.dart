@@ -7,6 +7,7 @@ class CalendarMultipleDatePicker extends BaseCalendarDatePicker {
     super.readonly,
     required super.initDate,
     required super.dates,
+    super.allowDates,
     super.style,
     super.onInitDateChange,
     this.currentDates = const [],
@@ -40,11 +41,14 @@ class _CalendarMultipleDatePicker
   }
 
   bool currentDatesContains(DateTime date) {
-    return currentDates[date.toString()] != null;
+    return currentDates.containsKey(date.toString());
   }
 
   void onSelectDate(DateTime date) {
     if (widget.readonly) return;
+    if (widget.allowDates.isNotEmpty && !widget.allowDates.contains(date)) {
+      return;
+    }
     if (currentDatesContains(date)) {
       currentDates.remove(date.toString());
     } else {
@@ -61,7 +65,17 @@ class _CalendarMultipleDatePicker
   }
 
   TextStyle? getDateTextStyle(Set<MaterialState> states, DateTime date) {
-    if (currentDatesContains(date)) {
+    final isAccent = currentDatesContains(date);
+    if (widget.allowDates.isNotEmpty) {
+      if (isAccent && widget.allowDates.contains(date)) {
+        return const TextStyle(
+          fontWeight: FontWeight.w600,
+          fontSize: 16,
+        );
+      }
+      return const TextStyle(fontWeight: FontWeight.w600);
+    }
+    if (isAccent) {
       return const TextStyle(
         fontWeight: FontWeight.w600,
         fontSize: 16,
@@ -71,8 +85,16 @@ class _CalendarMultipleDatePicker
   }
 
   Color? getDateForegroundColor(Set<MaterialState> states, DateTime date) {
-    if (currentDatesContains(date) ||
-        date == DateUtils.dateOnly(DateTime.now())) {
+    final isAccent = currentDatesContains(date) ||
+        date == DateUtils.dateOnly(DateTime.now());
+    if (widget.allowDates.isNotEmpty) {
+      if (widget.allowDates.contains(date)) {
+        if (isAccent) return widget.style?.accentColor;
+        return widget.style?.primaryColor;
+      }
+      return widget.style?.secondaryColor;
+    }
+    if (isAccent) {
       return widget.style?.accentColor;
     }
     if (date.month == initDate.month) {
@@ -82,7 +104,14 @@ class _CalendarMultipleDatePicker
   }
 
   Color? getDateBackground(Set<MaterialState> states, DateTime date) {
-    if (currentDatesContains(date)) {
+    final isAccent = currentDatesContains(date);
+    if (widget.allowDates.isNotEmpty) {
+      if (isAccent && widget.allowDates.contains(date)) {
+        return widget.style?.accentBackgroundColor;
+      }
+      return null;
+    }
+    if (isAccent) {
       return widget.style?.accentBackgroundColor;
     }
     return null;
@@ -106,12 +135,14 @@ class _CalendarMultipleDatePicker
                   textStyle: MaterialStateProperty.resolveWith(
                     (states) => getDateTextStyle(states, date),
                   ),
-                  shape: const MaterialStatePropertyAll(CircleBorder()),
                   foregroundColor: MaterialStateProperty.resolveWith(
                     (states) => getDateForegroundColor(states, date),
                   ),
                   backgroundColor: MaterialStateProperty.resolveWith(
                     (states) => getDateBackground(states, date),
+                  ),
+                  overlayColor: MaterialStateProperty.resolveWith(
+                    (states) => getDateOverlayColor(states, date),
                   ),
                 ),
                 onPressed: () => onSelectDate(date),
