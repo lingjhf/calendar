@@ -8,6 +8,7 @@ class CalendarSingleDatePicker extends BaseCalendarDatePicker {
     super.readonly,
     required super.initDate,
     required super.dates,
+    super.allowDates,
     super.style,
     super.onInitDateChange,
     this.currentDate,
@@ -39,6 +40,11 @@ class _CalendarSingleDatePickerState
   //点击选择日期
   void onSelectDate(DateTime date) {
     if (widget.readonly) return;
+    if (widget.allowDates.isNotEmpty) {
+      if (!widget.allowDates.contains(date)) {
+        return;
+      }
+    }
     currentDate = date == currentDate ? null : date;
     if (date.month != initDate.month) {
       widget.onInitDateChange?.call(date);
@@ -51,7 +57,17 @@ class _CalendarSingleDatePickerState
   }
 
   TextStyle? getDateTextStyle(Set<MaterialState> states, DateTime date) {
-    if (isCurrentDate(date)) {
+    final isAccent = isCurrentDate(date);
+    if (widget.allowDates.isNotEmpty) {
+      if (isAccent && widget.allowDates.contains(date)) {
+        return const TextStyle(
+          fontWeight: FontWeight.w600,
+          fontSize: 16,
+        );
+      }
+      return const TextStyle(fontWeight: FontWeight.w600);
+    }
+    if (isAccent) {
       return const TextStyle(
         fontWeight: FontWeight.w600,
         fontSize: 16,
@@ -61,7 +77,16 @@ class _CalendarSingleDatePickerState
   }
 
   Color? getDateForegroundColor(Set<MaterialState> states, DateTime date) {
-    if (isCurrentDate(date) || date == DateUtils.dateOnly(DateTime.now())) {
+    final isAccent =
+        isCurrentDate(date) || date == DateUtils.dateOnly(DateTime.now());
+    if (widget.allowDates.isNotEmpty) {
+      if (widget.allowDates.contains(date)) {
+        if (isAccent) return widget.style?.accentColor;
+        return widget.style?.primaryColor;
+      }
+      return widget.style?.secondaryColor;
+    }
+    if (isAccent) {
       return widget.style?.accentColor;
     }
     if (date.month == initDate.month) {
@@ -71,7 +96,14 @@ class _CalendarSingleDatePickerState
   }
 
   Color? getDateBackground(Set<MaterialState> states, DateTime date) {
-    if (isCurrentDate(date)) {
+    final isAccent = isCurrentDate(date);
+    if (widget.allowDates.isNotEmpty) {
+      if (isAccent && widget.allowDates.contains(date)) {
+        return widget.style?.accentBackgroundColor;
+      }
+      return null;
+    }
+    if (isAccent) {
       return widget.style?.accentBackgroundColor;
     }
     return null;
