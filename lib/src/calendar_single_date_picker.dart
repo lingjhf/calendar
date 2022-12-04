@@ -127,12 +127,14 @@ class _CalendarSingleDatePickerState
                   textStyle: MaterialStateProperty.resolveWith(
                     (states) => getDateTextStyle(states, date),
                   ),
-                  shape: const MaterialStatePropertyAll(CircleBorder()),
                   foregroundColor: MaterialStateProperty.resolveWith(
                     (states) => getDateForegroundColor(states, date),
                   ),
                   backgroundColor: MaterialStateProperty.resolveWith(
                     (states) => getDateBackground(states, date),
+                  ),
+                  overlayColor: MaterialStateProperty.resolveWith(
+                    (states) => getDateOverlayColor(states, date),
                   ),
                 ),
                 onPressed: () => onSelectDate(date),
