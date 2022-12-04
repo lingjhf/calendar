@@ -32,19 +32,12 @@ class _CalendarSingleDatePickerState
   }
 
   bool isCurrentDate(DateTime date) {
-    if (currentDate != null && date == DateUtils.dateOnly(currentDate!)) {
-      return true;
-    }
-    return false;
+    return currentDate != null && date == DateUtils.dateOnly(currentDate!);
   }
 
   //点击选择日期
   void onSelectDate(DateTime date) {
-    if (date == currentDate) {
-      currentDate = null;
-    } else {
-      currentDate = date;
-    }
+    currentDate = date == currentDate ? null : date;
     if (date.month != initDate.month) {
       widget.onInitDateChange?.call(date);
       widget.onChange?.call(currentDate);
