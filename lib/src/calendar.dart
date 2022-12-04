@@ -170,12 +170,24 @@ class _CalendarState extends State<Calendar> {
     }
   }
 
+  CalendarStyle disableStyle(CalendarStyle style) {
+    return style.copyWith(
+      accentColor: style.accentColor.withOpacity(0.6),
+      primaryColor: style.primaryColor.withOpacity(0.6),
+      secondaryColor: style.secondaryColor.withOpacity(0.6),
+      backgroundColor: style.backgroundColor.withOpacity(0.6),
+      accentBackgroundColor: style.accentBackgroundColor.withOpacity(0.6),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
-    final style = widget.style ??
+    CalendarStyle style = widget.style ??
         Theme.of(context).extension<CalendarStyle>() ??
         CalendarStyle();
-
+    if (widget.disable) {
+      style = disableStyle(style);
+    }
     return DefaultTextStyle(
       style: TextStyle(color: style.primaryColor),
       child: Container(
@@ -184,11 +196,20 @@ class _CalendarState extends State<Calendar> {
           color: style.backgroundColor,
           borderRadius: style.borderRadius,
         ),
-        child: SizedBox(
-          width: 7 * 36,
-          height: 64 + 6 * 36,
-          child: buildPicker(style),
-        ),
+        child: Stack(children: [
+          SizedBox(
+            width: 7 * 36,
+            height: 64 + 6 * 36,
+            child: buildPicker(style),
+          ),
+          if (widget.disable)
+            const Positioned.fill(
+              child: MouseRegion(
+                cursor: SystemMouseCursors.forbidden,
+                child: SizedBox(),
+              ),
+            )
+        ]),
       ),
     );
   }
