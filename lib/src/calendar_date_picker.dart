@@ -2,6 +2,7 @@ import 'package:flutter/material.dart' hide CalendarDatePicker;
 
 import '../calendar.dart';
 import 'base.dart';
+import 'calendar_date_range_picker.dart';
 import 'calendar_multiple_date_picker.dart';
 import 'calendar_single_date_picker.dart';
 import 'calendar_week.dart';
@@ -85,6 +86,7 @@ class _CalendarDatePickerState extends State<CalendarDatePicker> {
   late DateTime initDate;
   DateTime? currentDate;
   List<DateTime> currentDates = [];
+  DateTimeRange? currentDateRange;
 
   ButtonStyle titleButtonSytle = const ButtonStyle(
     padding: MaterialStatePropertyAll(EdgeInsets.all(0)),
@@ -100,7 +102,8 @@ class _CalendarDatePickerState extends State<CalendarDatePicker> {
   void initState() {
     initDate = widget.initDate;
     currentDate = widget.currentDate;
-
+    currentDates = widget.currentDates;
+    currentDateRange = widget.currentDateRange;
     setDates();
     super.initState();
   }
@@ -179,6 +182,10 @@ class _CalendarDatePickerState extends State<CalendarDatePicker> {
     currentDates = dates;
   }
 
+  void onSingleDateRangeChange(DateTimeRange? dateRange) {
+    currentDateRange = dateRange;
+  }
+
   Widget buildDatePicker() {
     if (widget.multiple) {
       return CalendarMultipleDatePicker(
@@ -188,6 +195,15 @@ class _CalendarDatePickerState extends State<CalendarDatePicker> {
         style: widget.style,
         onInitDateChange: onInitDateChange,
         onChange: onMultipleDateChange,
+      );
+    }
+    if (widget.range) {
+      return CalendarSingleDateRangePicker(
+        initDate: initDate,
+        dates: dates,
+        style: widget.style,
+        onInitDateChange: onInitDateChange,
+        onChange: onSingleDateRangeChange,
       );
     }
     return CalendarSingleDatePicker(
