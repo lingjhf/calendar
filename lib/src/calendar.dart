@@ -58,13 +58,13 @@ class Calendar extends StatefulWidget {
   //todo
   final DateTime? maxDate;
 
-  //todo一个星期的开始
+  //一个星期的开始
   final CalendarWeekDay firstDayOfWeek;
 
-  //todo是否禁用
+  //是否禁用
   final bool disable;
 
-  //todo是否只读
+  //是否只读
   final bool readonly;
 
   final CalendarMode mode;
