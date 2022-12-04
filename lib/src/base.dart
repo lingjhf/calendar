@@ -28,7 +28,7 @@ abstract class BaseCalendarDatePicker extends StatefulWidget {
   const BaseCalendarDatePicker({
     super.key,
     required this.initDate,
-    required this.dates ,
+    required this.dates,
     this.style,
     this.onInitDateChange,
   });
