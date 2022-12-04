@@ -5,6 +5,7 @@ import 'base.dart';
 class CalendarSingleDatePicker extends BaseCalendarDatePicker {
   const CalendarSingleDatePicker({
     super.key,
+    super.readonly,
     required super.initDate,
     required super.dates,
     super.style,
@@ -37,6 +38,7 @@ class _CalendarSingleDatePickerState
 
   //点击选择日期
   void onSelectDate(DateTime date) {
+    if (widget.readonly) return;
     currentDate = date == currentDate ? null : date;
     if (date.month != initDate.month) {
       widget.onInitDateChange?.call(date);

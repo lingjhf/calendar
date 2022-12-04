@@ -132,6 +132,7 @@ class _CalendarState extends State<Calendar> {
     switch (mode) {
       case CalendarMode.day:
         return CalendarDatePicker(
+          readonly: widget.readonly,
           initDate: initDate,
           currentDate: currentDate,
           range: widget.range,

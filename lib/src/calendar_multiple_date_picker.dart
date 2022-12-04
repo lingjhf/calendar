@@ -4,6 +4,7 @@ import 'base.dart';
 class CalendarMultipleDatePicker extends BaseCalendarDatePicker {
   const CalendarMultipleDatePicker({
     super.key,
+    super.readonly,
     required super.initDate,
     required super.dates,
     super.style,
@@ -43,6 +44,7 @@ class _CalendarMultipleDatePicker
   }
 
   void onSelectDate(DateTime date) {
+    if (widget.readonly) return;
     if (currentDatesContains(date)) {
       currentDates.remove(date.toString());
     } else {

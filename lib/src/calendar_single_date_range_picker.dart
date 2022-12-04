@@ -5,6 +5,7 @@ import 'extensions.dart';
 class CalendarSingleDateRangePicker extends BaseCalendarDatePicker {
   const CalendarSingleDateRangePicker({
     super.key,
+    super.readonly,
     required super.initDate,
     required super.dates,
     super.style,
@@ -50,6 +51,7 @@ class _CalendarSingleDateRangePickerState
   }
 
   void onSelectDate(DateTime date) {
+    if (widget.readonly) return;
     if (startDate == null &&
         currentDateRange != null &&
         currentDateRange!.contains(date)) {

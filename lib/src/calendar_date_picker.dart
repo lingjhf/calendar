@@ -15,6 +15,7 @@ class CalendarDatePicker extends BasePicker {
     super.currentDate,
     super.style,
     super.onChange,
+    this.readonly = false,
     this.range = false,
     this.multiple = false,
     this.currentDates = const [],
@@ -33,6 +34,8 @@ class CalendarDatePicker extends BasePicker {
     this.onYearPick,
   });
 
+  final bool readonly;
+
   //是否可以选择日期范围
   final bool range;
 
@@ -45,6 +48,7 @@ class CalendarDatePicker extends BasePicker {
   //range为true才能使用
   final DateTimeRange? currentDateRange;
 
+  //range和multiple同时为true才能使用
   final List<DateTimeRange> currentDateRanges;
 
   //todo
@@ -56,7 +60,7 @@ class CalendarDatePicker extends BasePicker {
   //todo
   final DateTime? maxDate;
 
-  //todo一个星期的开始
+  //一个星期的开始
   final CalendarWeekDay firstDayOfWeek;
 
   //日期范围变化回调函数
@@ -189,6 +193,7 @@ class _CalendarDatePickerState extends State<CalendarDatePicker> {
   Widget buildDatePicker() {
     if (widget.multiple) {
       return CalendarMultipleDatePicker(
+        readonly: widget.readonly,
         initDate: initDate,
         currentDates: currentDates,
         dates: dates,
@@ -199,6 +204,7 @@ class _CalendarDatePickerState extends State<CalendarDatePicker> {
     }
     if (widget.range) {
       return CalendarSingleDateRangePicker(
+        readonly: widget.readonly,
         initDate: initDate,
         dates: dates,
         style: widget.style,
@@ -207,6 +213,7 @@ class _CalendarDatePickerState extends State<CalendarDatePicker> {
       );
     }
     return CalendarSingleDatePicker(
+      readonly: widget.readonly,
       initDate: initDate,
       currentDate: currentDate,
       dates: dates,
@@ -220,19 +227,20 @@ class _CalendarDatePickerState extends State<CalendarDatePicker> {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        SizedBox(
-          height: 32,
-          child: CalendarDatePickerToolbar(
-            date: initDate,
-            style: widget.style,
-            onMonthPick: () => widget.onMonthPick?.call(),
-            onYearPick: () => widget.onYearPick?.call(),
-            onPrevMonth: onPrevMonth,
-            onNextMonth: onNextMonth,
-            onPrevYear: onPrevYear,
-            onNextYear: onNextYear,
+        if (!widget.readonly)
+          SizedBox(
+            height: 32,
+            child: CalendarDatePickerToolbar(
+              date: initDate,
+              style: widget.style,
+              onMonthPick: () => widget.onMonthPick?.call(),
+              onYearPick: () => widget.onYearPick?.call(),
+              onPrevMonth: onPrevMonth,
+              onNextMonth: onNextMonth,
+              onPrevYear: onPrevYear,
+              onNextYear: onNextYear,
+            ),
           ),
-        ),
         CalendarWeek(
           firstDayOfWeek: widget.firstDayOfWeek,
           style: TextStyle(

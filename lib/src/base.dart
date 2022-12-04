@@ -27,11 +27,14 @@ abstract class BasePicker extends StatefulWidget {
 abstract class BaseCalendarDatePicker extends StatefulWidget {
   const BaseCalendarDatePicker({
     super.key,
+    this.readonly = false,
     required this.initDate,
     required this.dates,
     this.style,
     this.onInitDateChange,
   });
+
+  final bool readonly;
 
   final DateTime initDate;
 
@@ -55,6 +58,9 @@ abstract class BaseCalendarDatePickerState<T extends BaseCalendarDatePicker>
     dates = widget.dates;
     cellStyle = ButtonStyle(
       overlayColor: MaterialStateProperty.resolveWith((states) {
+        if (widget.readonly) {
+          return Colors.transparent;
+        }
         return widget.style?.accentBackgroundColor;
       }),
     );
