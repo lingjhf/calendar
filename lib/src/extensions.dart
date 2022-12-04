@@ -1,3 +1,5 @@
+import 'package:flutter/material.dart';
+
 extension DateExtension on DateTime {
   String monthString() {
     switch (month) {
@@ -55,5 +57,17 @@ extension DateExtension on DateTime {
       m = 12;
     }
     return DateTime(y, m, day);
+  }
+}
+
+extension DateRangeExtension on DateTimeRange {
+  bool contains(DateTime dateTime) {
+    return start == dateTime ||
+        end == dateTime ||
+        (dateTime.isAfter(start) && dateTime.isBefore(end));
+  }
+
+  bool between(DateTime dateTime) {
+    return dateTime.isAfter(start) && dateTime.isBefore(end);
   }
 }
