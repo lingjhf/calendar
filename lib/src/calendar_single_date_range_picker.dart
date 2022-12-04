@@ -53,7 +53,6 @@ class _CalendarSingleDateRangePickerState
     if (startDate == null &&
         currentDateRange != null &&
         currentDateRange!.contains(date)) {
-      startDate = null;
       currentDateRange = null;
     } else if (startDate != null) {
       currentDateRange = date.isBefore(startDate!)
