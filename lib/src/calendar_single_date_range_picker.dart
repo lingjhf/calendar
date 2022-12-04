@@ -174,7 +174,6 @@ class _CalendarSingleDateRangePickerState
                     textStyle: MaterialStateProperty.resolveWith(
                       (states) => getDateTextStyle(states, date),
                     ),
-                    shape: const MaterialStatePropertyAll(CircleBorder()),
                     foregroundColor: MaterialStateProperty.resolveWith(
                       (states) => getDateForegroundColor(states, date),
                     ),
