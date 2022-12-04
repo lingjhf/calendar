@@ -44,6 +44,11 @@ class _CalendarSingleDateRangePickerState
     return false;
   }
 
+  bool isStartAndEndDateEqual(DateTime date) {
+    return currentDateRange?.start == currentDateRange?.end &&
+        currentDateRange?.end == date;
+  }
+
   void onSelectDate(DateTime date) {
     if (startDate == null &&
         currentDateRange != null &&
@@ -70,6 +75,9 @@ class _CalendarSingleDateRangePickerState
 
   BoxDecoration? getDateBoxDecoration(DateTime date) {
     if (currentDateRange == null) return null;
+    if (isStartAndEndDateEqual(date)) {
+      return null;
+    }
     LinearGradient? gradient;
     if (date == currentDateRange!.start) {
       gradient = LinearGradient(
@@ -93,6 +101,9 @@ class _CalendarSingleDateRangePickerState
 
   BoxDecoration? getStartOrEndDateBoxDecoration(DateTime date) {
     if (currentDateRange == null) return null;
+    if (isStartAndEndDateEqual(date)) {
+      return null;
+    }
     LinearGradient? gradient;
     if (date == currentDateRange!.start) {
       gradient = LinearGradient(
@@ -130,7 +141,7 @@ class _CalendarSingleDateRangePickerState
   }
 
   Color? getDateBackground(Set<MaterialState> states, DateTime date) {
-    if (date == startDate) {
+    if (date == startDate || isStartAndEndDateEqual(date)) {
       return widget.style?.accentBackgroundColor;
     }
     return null;
